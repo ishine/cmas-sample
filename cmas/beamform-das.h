@@ -27,9 +27,9 @@ class DasComputer {
  public:
   typedef DasOptions Options;
   DasComputer() = default;
-  DasComputer(ArrayGeometry &array, const DasOptions &opts) {Initialize(array, opts);};
+  DasComputer(const ArrayGeometry &array, const DasOptions &opts) {Initialize(array, opts);};
   // Initialize Delay-and-sum Beamformer
-  bool Initialize(ArrayGeometry &array, const DasOptions &opts);
+  bool Initialize(const ArrayGeometry &array, const DasOptions &opts);
   // Set expected angles
   void SetExpectedAngles(const Eigen::VectorXi &expected_angles) {
     if (expected_angles.size() == num_output_) {
@@ -42,7 +42,7 @@ class DasComputer {
     update_weight_ = true;
   };
   // Beamform
-  void Beamform(const Eigen::MatrixXcf &array_spec, Eigen::MatrixXcf &out_spec, const Eigen::VectorXi &est_doa= Eigen::VectorXi::Zero(0));
+  void Beamform(const Eigen::MatrixXcf &array_spec, Eigen::MatrixXcf &out_spec, const Eigen::VectorXi &est_doa = Eigen::VectorXi::Zero(0));
   // Beamform the spectra and get the steered response power
   void Beamform(const Eigen::MatrixXcf &array_spec, Eigen::VectorXf &out_amp2);
   // Reset delay-and-sum Beamformer
@@ -53,7 +53,7 @@ class DasComputer {
     return true;
   };
  private:
-  void InitializeWeight();
+  void InitializeWeight(const Eigen::VectorXi & weight_angles);
   DasOptions opts_;
   ArrayGeometry array_;
   int num_bins_;

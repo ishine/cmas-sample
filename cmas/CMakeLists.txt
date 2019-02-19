@@ -3,7 +3,7 @@ include_directories(../)
 aux_source_directory(. base-src)
 set(base-src audio-device-pa.cc beamform-das.cc circular-array-separation.cc
 io-funcs.cc kaldi-error.cc kaldi-math.cc kaldi-utils.cc online-wola.cc
-parse-options.cc r2fft.cc resample.cc srfft.cc string-split.cc
+parse-options.cc r2fft.cc resample.cc srfft.cc string-split.cc ssl-srp.cc
 text-utils.cc wave-header.cc wola.cc)
 add_library(cmas-api ${base-src})
 
