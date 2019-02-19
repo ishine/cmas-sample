@@ -1,2 +1,6 @@
 # cmas-sample
-a simple sample to illustrate circular microphone array separator based on beamforming
+a simple sample to illustrate circular microphone array separator and recording.
+
+## outside dependency
+   + Eigen
+   + PortAudio
