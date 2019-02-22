@@ -65,8 +65,8 @@ class OnlineWola {
 
     in_time_.setZero(opts_.num_chan_ * opts_.frame_len_, opts_.block_);
 
-    pcm_in_float_.setZero(opts_.block_ * opts_.frame_shift_ * opts_.num_chan_ );
-    pcm_out_float_.setZero(opts_.block_ * opts_.frame_shift_ * opts_.out_chan_);
+    pcm_in_float_.setZero(10 * opts_.fs_ * opts_.num_chan_ );
+    pcm_out_float_.setZero(10 * opts_.fs_ * opts_.out_chan_);
 
     // output overlap buffer
     out_overlap_.setZero(opts_.out_chan_, opts_.frame_len_);
