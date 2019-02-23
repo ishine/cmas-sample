@@ -5,6 +5,14 @@ a simple sample to illustrate circular microphone array separator and recording.
    + Eigen
    + PortAudio
 
-```bash
-  ./cmas/test-cmas-api --expect-beams="0|3" path/to/in-6ch.wav path/to/output.wav 
+
+
+## examples
+
+```cpp
+./test-cmas-api --expect-beams="0|3" path/to/in-6ch.wav path/to/output.wav 
 ```
+
+
+
+![image-20190223121946405](/Users/danhui/Library/Application Support/typora-user-images/image-20190223121946405.png)
