@@ -114,7 +114,7 @@ class CmasSeparator {
     // in_spec.rows() != (num_chan_ * num_bins_);
     int num_frames = in_spec.cols();
     Eigen::MatrixXcf& out_spec = online_wola_.GetOutSpec();
-    if (0) {
+    if (1) {
       out_spec.setZero(num_bins_ * out_chan_, num_frames);
       Eigen::MatrixXcf in_spec_frame, out_spec_frame;
       for (int iframe = 0; iframe < num_frames; iframe++) {
