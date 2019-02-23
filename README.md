@@ -15,4 +15,4 @@ a simple sample to illustrate circular microphone array separator and recording.
 
 
 
-![image-20190223121946405](/Users/danhui/Library/Application Support/typora-user-images/image-20190223121946405.png)
+![image-20190223121946405](https://github.com/danhuixie/cmas-sample/blob/master/sample_result.jpg)
