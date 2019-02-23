@@ -5,6 +5,7 @@
 #include "string-split.h"
 #include "spicax-eigen.h"
 #include "kaldi-common.h"
+#include "beamform-online-cgmm.h"
 #include <sstream>
 
 class CmasSeparator {
@@ -88,6 +89,20 @@ class CmasSeparator {
     delay_index_ = block_frames_ - delay_frames_;
     num_bins_ = fftlen / 2 + 1;
     block_spec_.setZero((num_chan_ * num_bins_), block_frames_);
+
+    spicax::OnlineCgmmMvdrOptions online_cgmm_opts;
+    if (array_type == 2) {
+      int num_mix = 6;
+      Eigen::VectorXi preset_angles;
+      preset_angles.setZero(num_mix);
+      preset_angles = Eigen::ArrayXi::LinSpaced(num_mix, 0, 300);
+      online_cgmm_opts.num_mix = num_mix;
+      online_cgmm_opts.preset_angles = preset_angles;
+    }
+    online_cgmm_opts.expected_angles = expected_angles;
+    online_cgmm_opts.block_frames = 101;
+    online_cgmm_.Initialize(array_, online_cgmm_opts);
+
     return true;
   };
 
@@ -99,18 +114,23 @@ class CmasSeparator {
     // in_spec.rows() != (num_chan_ * num_bins_);
     int num_frames = in_spec.cols();
     Eigen::MatrixXcf& out_spec = online_wola_.GetOutSpec();
-    out_spec.setZero(num_bins_ * out_chan_, num_frames);
-    Eigen::MatrixXcf in_spec_frame, out_spec_frame;
-    for (int iframe = 0; iframe < num_frames; iframe++) {
-      block_spec_.col(frame_index_) = in_spec.col(iframe);
-      in_spec_frame = in_spec.col(iframe);
-      online_srp_.Accumlate(in_spec_frame);
-      const Eigen::VectorXi & est_doa = online_srp_.GetMultiDoa();
-      in_spec_frame = block_spec_.col(delay_index_);
-      online_das_.Beamform(in_spec_frame, out_spec_frame, est_doa);
-      out_spec.col(iframe) = out_spec_frame;
-      frame_index_ = (frame_index_ + 1) % block_frames_;
-      delay_index_ = (delay_index_ + 1) % block_frames_;
+    if (0) {
+      out_spec.setZero(num_bins_ * out_chan_, num_frames);
+      Eigen::MatrixXcf in_spec_frame, out_spec_frame;
+      for (int iframe = 0; iframe < num_frames; iframe++) {
+        block_spec_.col(frame_index_) = in_spec.col(iframe);
+        in_spec_frame = in_spec.col(iframe);
+        online_srp_.Accumlate(in_spec_frame);
+        const Eigen::VectorXi & est_doa = online_srp_.GetMultiDoa();
+        in_spec_frame = block_spec_.col(delay_index_);
+        online_das_.Beamform(in_spec_frame, out_spec_frame, est_doa);
+        out_spec.col(iframe) = out_spec_frame;
+        frame_index_ = (frame_index_ + 1) % block_frames_;
+        delay_index_ = (delay_index_ + 1) % block_frames_;
+      }
+    } else {
+      Eigen::MatrixXcf& out_spec = online_wola_.GetOutSpec();
+      online_cgmm_.Beamform(in_spec, out_spec);
     }
 
     // online_das_.Beamform(in_spec, out_spec);
@@ -142,6 +162,7 @@ class CmasSeparator {
   spicax::OnlineWola online_wola_;
   spicax::DasComputer online_das_;
   spicax::SrpComputer online_srp_;
+  spicax::OnlineCgmmMvdrComputer online_cgmm_;
 };
 
 CmasSeparator separator;
