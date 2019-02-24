@@ -71,6 +71,10 @@ const Eigen::MatrixXcf& OnlineWola::Decompose(const float* pcm_in, int samples_p
 
 const Eigen::MatrixXcf& OnlineWola::Decompose(const short* pcm_in, int samples_per_chan, bool interleaved) {
   int num_samples = samples_per_chan * opts_.num_chan_;
+  if(num_samples > pcm_in_float_.size()){
+    pcm_in_float_.setZero(num_samples);
+    pcm_out_float_.setZero(num_samples);
+  }
   for (int isample = 0; isample < num_samples; isample++ ) {
     pcm_in_float_(isample) = (float)pcm_in[isample];
   }
