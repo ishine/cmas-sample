@@ -111,10 +111,9 @@ int AudioDevicePa::PushQueue(const void *input, int frames) {
     if (target_channels_ != record_paras_.channelCount) {
       output_short_ = orig_data_.topRows(target_channels_);
       circular_buffer_.PushWithOverflow(output_short_.data(), frames_per_buffer_ * target_channels_);
-    }else{
+    } else {
       circular_buffer_.PushWithOverflow(orig_data_.data(), frames_per_buffer_ * target_channels_);
     }
-
   } else {
     //Allow Downsampling
     for (int i = 0 ; i < frames_per_buffer_; i++) {
@@ -139,13 +138,15 @@ bool AudioDevicePa::PrepareStream(std::string device_key_name) {
     record_paras_.device = -1;
     for (int i = 0; i < num_devices; i++) {
       std::string device_name(Pa_GetDeviceInfo(i)->name);
-      if (device_name.find(device_key_name) != std::string::npos) {
+      if ((device_name.find(device_key_name) != std::string::npos)
+          && (Pa_GetDeviceInfo(i)->maxInputChannels >= target_channels_)) {
         record_paras_.device = i;
         break;
       }
     }
   }
   if (record_paras_.device == -1) {return false;}
+  KALDI_LOG << "record_paras_.device=" << record_paras_.device << "\n";
   record_paras_.channelCount = Pa_GetDeviceInfo(record_paras_.device)->maxInputChannels;
   if (record_paras_.channelCount == 0) {
     KALDI_LOG << "Error, maxInputChannels of " << device_key_name << "=" << Pa_GetDeviceInfo(record_paras_.device)->maxInputChannels << " \n";
