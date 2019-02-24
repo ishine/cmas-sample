@@ -63,6 +63,7 @@ class OnlineWola {
     in_saved_frame_ = 0;
     in_saved_samples_ = opts_.frame_len_ - opts_.frame_shift_;
 
+    array_frame_.setZero(opts_.frame_len_, opts_.num_chan_);
     in_time_.setZero(opts_.num_chan_ * opts_.frame_len_, opts_.block_);
 
     pcm_in_float_.setZero(10 * opts_.fs_ * opts_.num_chan_ );
@@ -78,6 +79,7 @@ class OnlineWola {
     in_saved_frame_ = 0;
     in_saved_samples_ = opts_.frame_len_ - opts_.frame_shift_;
     if (in_time_.size() > 0)in_time_.setZero();
+    if (array_frame_.size() > 0)array_frame_.setZero();
     if (pcm_in_float_.size() > 0)pcm_in_float_.setZero();
     if (pcm_out_float_.size() > 0)pcm_out_float_.setZero();
     if (out_overlap_.size() > 0)out_overlap_.setZero();
@@ -99,7 +101,7 @@ class OnlineWola {
   Eigen::MatrixXcf& GetOutSpec() { return out_spec_; }
 
  private:
-  void Analyze();
+  void Analyze(int frame_index);
   OnlineWolaOptions opts_;
 
   Eigen::VectorXf pcm_in_float_;
@@ -108,6 +110,7 @@ class OnlineWola {
   int in_saved_samples_;
   int in_saved_frame_;
 
+  Eigen::MatrixXf array_frame_;   //  frame_len * num_chan
   Eigen::MatrixXf in_time_;       // (frame_len * num_chan_) * num_frames
   Eigen::MatrixXf out_overlap_;   // out_chan_ * frame_len
   Eigen::MatrixXcf in_spec_;      // (num_bins_ * num_chan_ ) * num_frames

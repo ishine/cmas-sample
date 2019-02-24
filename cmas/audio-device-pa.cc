@@ -140,8 +140,10 @@ bool AudioDevicePa::PrepareStream(std::string device_key_name) {
       std::string device_name(Pa_GetDeviceInfo(i)->name);
       if ((device_name.find(device_key_name) != std::string::npos)
           && (Pa_GetDeviceInfo(i)->maxInputChannels >= target_channels_)) {
-        record_paras_.device = i;
-        break;
+        if (Pa_GetHostApiInfo((Pa_GetDeviceInfo(i)->hostApi))->type != paMME) {
+          record_paras_.device = i;
+          break;
+        }
       }
     }
   }
