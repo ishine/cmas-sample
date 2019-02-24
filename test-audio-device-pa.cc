@@ -41,12 +41,12 @@ int main(int argc, char **argv) {
   int all_samples = 0;
 
   int required_samples = fs;
-  KALDI_LOG << "start to recording 3 seconds, target_samplerate=" << fs << ",channels=" << channels << "\n";
-  for (int i = 0; i < 3; i++) {
+  KALDI_LOG << "start to recording 10 seconds, target_samplerate=" << fs << ",channels=" << channels << "\n";
+  for (int i = 0; i < 10; i++) {
     int num_samples = device.ReadPcmData(buffer, required_samples);
     KALDI_LOG << "read " << num_samples << " samples\n";
-    KALDI_LOG << "sleep for 1 second to simulate some other operations\n";
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    // KALDI_LOG << "sleep for 1 second to simulate some other operations\n";
+    // std::this_thread::sleep_for(std::chrono::seconds(1));
     all_samples += num_samples;
     os.write((const char*)buffer, num_samples * channels * sizeof(short));
   }

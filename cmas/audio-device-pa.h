@@ -42,7 +42,7 @@ class AudioDevicePa {
   // read pcm data
   int ReadPcmData(short *buffer, int required_samples) {
     int num_samples = circular_buffer_.PopWithTimeOut(buffer, required_samples * target_channels_, std::chrono::seconds(2));
-    return num_samples;
+    return (num_samples / target_channels_);
   }
   // actual callback function
   int PushQueue(const void *input, int frames);

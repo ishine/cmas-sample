@@ -110,8 +110,11 @@ int AudioDevicePa::PushQueue(const void *input, int frames) {
   if (default_samplerate_ == target_samplerate_) {
     if (target_channels_ != record_paras_.channelCount) {
       output_short_ = orig_data_.topRows(target_channels_);
+      circular_buffer_.PushWithOverflow(output_short_.data(), frames_per_buffer_ * target_channels_);
+    }else{
+      circular_buffer_.PushWithOverflow(orig_data_.data(), frames_per_buffer_ * target_channels_);
     }
-    circular_buffer_.PushWithOverflow(output_short_.data(), frames_per_buffer_ * target_channels_);
+
   } else {
     //Allow Downsampling
     for (int i = 0 ; i < frames_per_buffer_; i++) {
