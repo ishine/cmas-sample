@@ -5,7 +5,7 @@ set(CMAKE_F "-Wall -std=c++11 -fPIC -O3")
 set(CMAKE_CXX_FLAGS ${CMAKE_F})
 
 aux_source_directory(${CMAKE_CURRENT_LIST_DIR}/cmas spciax-cmas-src)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/ ${CMAKE_CURRENT_LIST_DIR}/cmas)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/ ${CMAKE_CURRENT_LIST_DIR}/cmas /Users/danhui/project/03-opensource/eigen-git-mirror/)
 
 add_library(cmas-api ${spciax-cmas-src})
 

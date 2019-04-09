@@ -1,8 +1,8 @@
 #ifndef SPICAX_EIGEN_H
 #define SPICAX_EIGEN_H
-#include "/Users/danhui/project/03-opensource/eigen-git-mirror/Eigen/Dense"
-#include "/Users/danhui/project/03-opensource/eigen-git-mirror/Eigen/SVD"
-#include "/Users/danhui/project/03-opensource/eigen-git-mirror/Eigen/LU"
+#include "Eigen/Dense"
+#include "Eigen/SVD"
+#include "Eigen/LU"
 
 // #define CIRCULAR_ARRAY 2
 

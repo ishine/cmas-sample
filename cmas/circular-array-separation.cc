@@ -6,6 +6,7 @@
 #include "spicax-eigen.h"
 #include "kaldi-common.h"
 #include "beamform-online-cgmm.h"
+#include "online-agc.h"
 #include <sstream>
 
 class CmasSeparator {
@@ -103,6 +104,7 @@ class CmasSeparator {
     online_cgmm_opts.block_frames = 101;
     online_cgmm_.Initialize(array_, online_cgmm_opts);
 
+    online_agc_.Init(30000.0f, 0.0f, 4.0f, 1);
     return true;
   };
 
@@ -135,6 +137,7 @@ class CmasSeparator {
 
     // online_das_.Beamform(in_spec, out_spec);
     int num_samples = online_wola_.Reconstruct(pcm_out_short);
+    online_agc_.Compute(pcm_out_short, pcm_out_short, num_samples);
     return num_samples;
   };
 
@@ -159,6 +162,7 @@ class CmasSeparator {
   int num_bins_;
   Eigen::MatrixXcf block_spec_;
   ArrayGeometry array_;
+  spicax::OnlineAgc online_agc_;
   spicax::OnlineWola online_wola_;
   spicax::DasComputer online_das_;
   spicax::SrpComputer online_srp_;
